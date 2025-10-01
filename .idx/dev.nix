@@ -5,7 +5,6 @@
       pkgs.nodePackages.firebase-tools
       pkgs.jdk17
       pkgs.unzip
-      (pkgs.postgresql_15.withPackages (p: [ p.pgvector ]))
       pkgs.nodejs_20
       pkgs.yarn
       pkgs.nodePackages.pnpm
@@ -21,10 +20,9 @@
       GOOGLE_API_KEY = "REPLACE_ME";
       MAPS_API_KEY = "";
     };
-    processes = {
-      postgresRun = {
-        command = "postgres -D ./local -k /tmp";
-      };
+    services.postgres = {
+      enable = true;
+      package = (pkgs.postgresql_15.withPackages (p: [ p.pgvector ]));
     };
     idx.extensions = [
       "Dart-Code.flutter"
@@ -36,22 +34,22 @@
     idx.workspace = {
       # Runs when a workspace is first created with this `dev.nix` file
       onCreate = {
-        npm-install = ''
+        npm-install = '''
           cd proxy
           npm ci
-        '';
+        ''';
       };
       onStart = {
-        genkit-start = ''
+        genkit-start = '''
           cd genkit
           npm install
           npm install --only=dev
           npx genkit-cli@1.0.4 start -- npx tsx --watch src/index.ts
-        '';
-        flutter-start = ''
+        ''';
+        flutter-start = '''
           flutter upgrade
           flutter run --machine -d web-server --web-hostname 0.0.0.0 --web-port 6789 --dart-define=WEB_HOST=9000-$WEB_HOST
-        '';
+        ''';
       };
     };
     idx.previews = {
@@ -73,4 +71,4 @@
         };
       };
     };
-  }
+  }'';};};}

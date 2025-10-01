@@ -37,14 +37,14 @@ class ResultCard extends StatelessWidget {
   Widget _buildSmall(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
-      // TODO: Improve image loading and caching
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image(
-            image: CachedNetworkImageProvider(
-              destination.imageUrl,
-            ),
+          CachedNetworkImage(
+            imageUrl: destination.imageUrl,
+            placeholder: (context, url) =>
+                const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
             fit: BoxFit.fitHeight,
           ),
           Positioned(
@@ -80,14 +80,14 @@ class ResultCard extends StatelessWidget {
   Widget _buildLarge(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
-      // TODO: Improve image loading and caching
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image(
-            image: CachedNetworkImageProvider(
-              destination.imageUrl,
-            ),
+          CachedNetworkImage(
+            imageUrl: destination.imageUrl,
+            placeholder: (context, url) =>
+                const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
             fit: BoxFit.fitHeight,
           ),
           Positioned(

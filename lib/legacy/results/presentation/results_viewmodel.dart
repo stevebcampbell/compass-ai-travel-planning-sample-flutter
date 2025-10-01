@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:developer';
+
 import '../../common/utils/result.dart';
 import '../business/model/destination.dart';
 import '../business/usecases/search_destination_usecase.dart';
@@ -32,6 +34,7 @@ class ResultsViewModel extends ChangeNotifier {
   // Setters are private
   List<Destination> _destinations = [];
   bool _loading = false;
+  Object? _error;
   String? _continent;
 
   /// List of destinations, may be empty but never null
@@ -40,6 +43,9 @@ class ResultsViewModel extends ChangeNotifier {
   /// Loading state
   bool get loading => _loading;
 
+  /// Error state
+  Object? get error => _error;
+
   /// Return a formatted String with all the filter options
   String get filters => _continent ?? '';
 
@@ -47,6 +53,7 @@ class ResultsViewModel extends ChangeNotifier {
   Future<void> search({String? continent}) async {
     // Set loading state and notify the view
     _loading = true;
+    _error = null;
     _continent = continent;
     notifyListeners();
 
@@ -62,8 +69,10 @@ class ResultsViewModel extends ChangeNotifier {
         }
       case Error():
         {
-          // TODO: Handle error
-          debugPrint(result.error.toString());
+          // If the result is an Error, update the error state
+          _error = result.error;
+          _destinations = [];
+          log(_error.toString());
         }
     }
 

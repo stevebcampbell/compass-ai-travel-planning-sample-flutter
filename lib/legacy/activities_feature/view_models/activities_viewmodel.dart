@@ -34,12 +34,16 @@ class ActivitiesViewModel extends ChangeNotifier {
   List<LegacyActivity> _activities = [];
   bool _loading = false;
   String? _location;
+  Object? _error;
 
   /// List of destinations, may be empty but never null
   List<LegacyActivity> get activities => _activities;
 
   /// Loading state
   bool get loading => _loading;
+
+  /// Error state
+  Object? get error => _error;
 
   /// Return a formatted String with all the filter options
   String get filters => _location ?? '';
@@ -62,8 +66,7 @@ class ActivitiesViewModel extends ChangeNotifier {
         }
       case Error():
         {
-          // TODO: Handle error
-          debugPrint(result.error.toString());
+          _error = result.error;
         }
     }
 

@@ -44,8 +44,21 @@ class _LegacyFormScreenState extends State<LegacyFormScreen> {
     var location = selectedLocation;
     var date = tripDateRange;
 
-    if (location == null || date == null) return;
-    // TODO: Show alert asking for location and date
+    if (location == null || date == null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          icon: Icon(
+            Icons.error_outline,
+            color: Theme.of(context).colorScheme.error,
+          ),
+          title: const Text(
+            'Location and date must be selected!',
+          ),
+        ),
+      );
+      return;
+    }
 
     context.read<TravelPlan>().setQuery(
           TravelQuery(location: location, dates: date, numPeople: numPeople),

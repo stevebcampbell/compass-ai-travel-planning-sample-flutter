@@ -24,7 +24,54 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
   @override
   Widget build(BuildContext context) {
     bool isSmall = MediaQuery.sizeOf(context).width < 800;
-    activities = context.watch<ActivitiesViewModel>().activities;
+    final viewModel = context.watch<ActivitiesViewModel>();
+    activities = viewModel.activities;
+    final error = viewModel.error;
+    final loading = viewModel.loading;
+
+    if (loading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Activities'),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (error != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Error'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text('Error: ${error.toString()}'),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: ElevatedButton(
+                  onPressed: () {
+                    viewModel.search(location: viewModel.filters);
+                  },
+                  child: const Text('Retry'),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }
 
     morningActivities = activities.where((activity) {
       return activity.timeOfDay == 'morning';

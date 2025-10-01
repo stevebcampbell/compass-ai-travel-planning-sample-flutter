@@ -30,9 +30,12 @@ Widget _buildLearnMoreDialogSmall(
         child: SizedBox(
             width: width,
             height: 0.5 * height,
-            child: Image(
-                image: CachedNetworkImageProvider(activity.imageUrl),
-                fit: BoxFit.cover)),
+            child: CachedNetworkImage(
+                imageUrl: activity.imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error))),
       ),
       const SizedBox(
         width: 16,
@@ -81,9 +84,13 @@ Widget _buildLearnMoreDialogMid(BuildContext context, LegacyActivity activity) {
           child: SizedBox(
               width: width,
               height: 0.6 * height,
-              child: Image(
-                  image: CachedNetworkImageProvider(activity.imageUrl),
-                  fit: BoxFit.cover)),
+              child: CachedNetworkImage(
+                  imageUrl: activity.imageUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error))),
         ),
         Text(
           '$duration ${duration <= 1 ? 'hour' : 'hours'}',
@@ -120,9 +127,13 @@ Widget _buildLearnMoreDialogLarge(
         child: SizedBox(
             width: 0.48 * width,
             height: height,
-            child: Image(
-                image: CachedNetworkImageProvider(activity.imageUrl),
-                fit: BoxFit.cover)),
+            child: CachedNetworkImage(
+                imageUrl: activity.imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.error))),
       ),
       const SizedBox(
         width: 16,
@@ -217,17 +228,16 @@ class _ActivityTileState extends State<ActivityTile> {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       child: Row(
         children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: CachedNetworkImageProvider(widget.activity.imageUrl),
-              ), // b
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            child: CachedNetworkImage(
+              imageUrl: widget.activity.imageUrl,
+              width: 80,
+              height: 80,
+              fit: BoxFit.cover,
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
           Expanded(
@@ -321,15 +331,17 @@ class _ActivityCardState extends State<ActivityCard> {
         },
         child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
-            // TODO: Improve image loading and caching
             child: SizedBox(
                 width: 400,
                 height: 400,
                 child: Stack(fit: StackFit.expand, children: [
-                  Image(
-                      image:
-                          CachedNetworkImageProvider(widget.activity.imageUrl),
-                      fit: BoxFit.fitHeight),
+                  CachedNetworkImage(
+                      imageUrl: widget.activity.imageUrl,
+                      fit: BoxFit.fitHeight,
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error)),
                   Positioned(right: 24, top: 24, child: _buildCheck(context)),
                   Positioned(
                       bottom: 32.0,
@@ -380,17 +392,16 @@ class ActivityDetailTile extends StatelessWidget {
       childrenPadding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
       maintainState: true,
       minTileHeight: 100,
-      leading: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(8),
-          ),
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: CachedNetworkImageProvider(activity.imageUrl),
-          ), // b
+      leading: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: CachedNetworkImage(
+          imageUrl: activity.imageUrl,
+          width: 60,
+          height: 60,
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+              const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       ),
       title: Text(activity.name),

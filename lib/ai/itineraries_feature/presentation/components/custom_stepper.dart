@@ -424,7 +424,7 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
     if (!_isDark()) {
       return isActive
           ? colorScheme.primary
-          : colorScheme.onSurface.withOpacity(0.38);
+          : colorScheme.onSurface.withAlpha(97);
     } else {
       return isActive ? colorScheme.secondary : colorScheme.surface;
     }
